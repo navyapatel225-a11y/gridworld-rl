@@ -1,11 +1,15 @@
 import json
 import numpy as np
 
-q_table = np.zeros((5, 2))
+# Load Q-table from JSON
+with open("q_table.json", "r") as f:
+    q_table = np.array(json.load(f))
 
-# Convert to list (JSON-friendly)
-q_table_list = q_table.tolist()
+print("Loaded Q-table:")
+print(q_table)
 
-# Save to JSON
-with open("q_table.json", "w") as f:
-    json.dump(q_table_list, f)
+# Example: choose best action for a state
+state = 0
+best_action = np.argmax(q_table[state])
+
+print("Best action for state", state, ":", best_action)

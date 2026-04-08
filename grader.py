@@ -1,14 +1,14 @@
 from baseline import baseline
-from task import run_task
+from inference import predict
 
 def grade():
-    test_inputs = ["Ansh", "OpenEnv", "Tester"]
+    test_cases = ["Ansh", "OpenEnv", "Tester"]
 
     results = []
 
-    for inp in test_inputs:
+    for inp in test_cases:
         expected = baseline(inp)
-        actual = run_task(inp)
+        actual = predict(inp)
 
         results.append({
             "input": inp,

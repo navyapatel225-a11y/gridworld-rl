@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install --no-cache-dir gradio numpy
+RUN pip install --no-cache-dir numpy
 
-CMD ["python", "app.py"]
+CMD ["python", "inference.py"]

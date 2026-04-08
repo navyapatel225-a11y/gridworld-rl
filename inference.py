@@ -2,11 +2,11 @@ import numpy as np
 from train import train_q_learning
 from env import GridEnv
 
-# Initialize
+# initialize once
 q_table = train_q_learning()
 env = GridEnv()
 
-# Required OpenEnv functions
+# OpenEnv API
 
 def reset():
     state = env.reset()
@@ -27,14 +27,12 @@ def act(state):
     return int(np.argmax(q_table[state]))
 
 
-# Optional local test
+# optional local debug
 if __name__ == "__main__":
     s = env.reset()
-
     for _ in range(10):
         a = act(s)
         s, r, d = env.step(a)
         print(s, r, d)
-
         if d:
             break

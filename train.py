@@ -17,7 +17,7 @@ def train_q_learning():
         while not done:
             action = np.random.randint(0, num_actions)
 
-            # simulate transition
+            # environment transition (must match env.py)
             if action == 1:
                 next_state = min(state + 1, num_states - 1)
             else:

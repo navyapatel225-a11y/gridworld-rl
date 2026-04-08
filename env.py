@@ -8,7 +8,6 @@ class GridEnv:
         return self.state
 
     def step(self, action):
-        # action: 0 = left, 1 = right
         if action == 1:
             self.state = min(self.state + 1, self.goal)
         else:

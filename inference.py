@@ -2,12 +2,11 @@ import numpy as np
 from train import train_q_learning
 from env import GridEnv
 
-# Train model once
+# Initialize
 q_table = train_q_learning()
-
 env = GridEnv()
 
-# Required OpenEnv-style functions
+# Required OpenEnv functions
 
 def reset():
     state = env.reset()
@@ -15,7 +14,7 @@ def reset():
 
 
 def step(action):
-    state, reward, done = env.step(action)
+    state, reward, done = env.step(int(action))
     return {
         "state": state,
         "reward": reward,
@@ -25,18 +24,17 @@ def step(action):
 
 def act(state):
     state = int(state)
-    action = int(np.argmax(q_table[state]))
-    return action
+    return int(np.argmax(q_table[state]))
 
 
-# Optional: quick test run
+# Optional local test
 if __name__ == "__main__":
-    print("Testing agent...")
+    s = env.reset()
 
-    state = env.reset()
     for _ in range(10):
-        action = act(state)
-        state, reward, done = env.step(action)
-        print(state, reward, done)
-        if done:
+        a = act(s)
+        s, r, d = env.step(a)
+        print(s, r, d)
+
+        if d:
             break

@@ -1,19 +1,22 @@
 class GridEnv:
-    def __init__(self, size=5):
-        self.size = size
+    def __init__(self):
         self.state = 0
+        self.goal_state = 4
 
     def reset(self):
         self.state = 0
         return self.state
 
     def step(self, action):
-        if action == 0:
-            self.state = max(0, self.state - 1)
+        # Action: 0 = left, 1 = right
+        if action == 1:
+            self.state += 1
         else:
-            self.state = min(self.size - 1, self.state + 1)
+            self.state -= 1
 
-        reward = 1 if self.state == self.size - 1 else 0
-        done = self.state == self.size - 1
+        self.state = max(0, min(self.state, self.goal_state))
+
+        reward = 1 if self.state == self.goal_state else 0
+        done = self.state == self.goal_state
 
         return self.state, reward, done

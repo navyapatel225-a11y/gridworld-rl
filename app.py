@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from task import run_task
+from inference import predict
 
 app = FastAPI()
 
 @app.get("/")
-def health():
-    return JSONResponse({"status": "ok"})
+def root():
+    return JSONResponse({"status": "running"})
 
 @app.get("/run")
 def run(name: str = "User"):
-    result = run_task(name)
-    return JSONResponse({"input": name, "output": result})
+    output = predict(name)
+    return JSONResponse({"input": name, "output": output})

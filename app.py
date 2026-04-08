@@ -2,9 +2,7 @@ import gradio as gr
 import numpy as np
 import random
 
-# ---------------------------
 # Environment
-# ---------------------------
 class GridEnv:
     def __init__(self, size=5):
         self.size = size
@@ -15,7 +13,6 @@ class GridEnv:
         return self.state
 
     def step(self, action):
-        # 0 = left, 1 = right
         if action == 0:
             self.state = max(0, self.state - 1)
         else:
@@ -27,9 +24,7 @@ class GridEnv:
         return self.state, reward, done
 
 
-# ---------------------------
-# Q-learning training
-# ---------------------------
+# Training
 def train_q_learning():
     num_states = 5
     num_actions = 2
@@ -48,7 +43,6 @@ def train_q_learning():
         done = False
 
         while not done:
-            # epsilon-greedy
             if random.uniform(0, 1) < epsilon:
                 action = random.randint(0, num_actions - 1)
             else:
@@ -56,8 +50,7 @@ def train_q_learning():
 
             next_state, reward, done = env.step(action)
 
-            # Q update
-            q_table[state, action] = q_table[state, action] + alpha * (
+            q_table[state, action] += alpha * (
                 reward + gamma * np.max(q_table[next_state]) - q_table[state, action]
             )
 
@@ -66,9 +59,7 @@ def train_q_learning():
     return q_table
 
 
-# ---------------------------
-# Run agent + get results
-# ---------------------------
+# UI function
 def run_agent():
     q_table = train_q_learning()
 
@@ -83,21 +74,16 @@ def run_agent():
         state, _, done = env.step(action)
         path.append(state)
 
-    return (
-        "Q-table:\n" + str(q_table),
-        "Learned Path:\n" + str(path)
-    )
+    return str(q_table), str(path)
 
 
-# ---------------------------
 # Gradio UI
-# ---------------------------
 demo = gr.Interface(
     fn=run_agent,
     inputs=[],
     outputs=["text", "text"],
-    title="Gridworld RL Agent",
-    description="Click run to train a Q-learning agent and see the learned Q-table and path."
+    title="Gridworld RL",
+    description="Train Q-learning and show results"
 )
 
-demo.launch()
+demo.launch(server_name="0.0.0.0", server_port=7860)

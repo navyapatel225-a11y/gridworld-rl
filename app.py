@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from task import run_task
 
 app = FastAPI()
 
 @app.get("/")
-def root():
-    return JSONResponse({"message": "Space is running 🚀"})
+def health():
+    return JSONResponse({"status": "ok"})
 
 @app.get("/run")
 def run(name: str = "User"):
-    return JSONResponse({"message": f"Hello {name}"})
+    result = run_task(name)
+    return JSONResponse({"input": name, "output": result})

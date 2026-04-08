@@ -9,5 +9,3 @@ pinned: false
 ---
 
 # GridWorld RL
-
-Simple reinforcement learning environment with FastAPI.

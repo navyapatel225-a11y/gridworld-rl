@@ -1,29 +1,10 @@
-from baseline import baseline
-from inference import predict
+def grade(rewards):
+    if not rewards:
+        return 0.0
 
-def grade():
-    test_cases = ["Ansh", "OpenEnv", "Tester"]
-
-    results = []
-
-    for inp in test_cases:
-        expected = baseline(inp)
-        actual = predict(inp)
-
-        results.append({
-            "input": inp,
-            "expected": expected,
-            "actual": actual,
-            "pass": expected == actual
-        })
-
-    score = sum(r["pass"] for r in results) / len(results)
-
-    return {
-        "score": score,
-        "details": results
-    }
+    score = sum(rewards) / (len(rewards) * 10)
+    return max(0.0, min(score, 1.0))
 
 
 if __name__ == "__main__":
-    print(grade())
+    print(grade([1, 2, 3]))

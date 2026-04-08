@@ -1,30 +1,36 @@
-import json
 import numpy as np
-from environment import GridWorld
-from agent import Agent
+import random
+from env import GridEnv
 
-env = GridWorld()
-agent = Agent()
+def train():
+    num_states = 5
+    num_actions = 2
 
-episodes = 100
+    q_table = np.zeros((num_states, num_actions))
 
-for _ in range(episodes):
-    state = env.reset()
-    done = False
+    alpha = 0.1
+    gamma = 0.9
+    epsilon = 0.2
+    episodes = 500
 
-    while not done:
-        action = agent.act(state)
-        next_state, reward, done = env.step(action)
+    env = GridEnv()
 
-        x,y = state
-        nx,ny = next_state
+    for _ in range(episodes):
+        state = env.reset()
+        done = False
 
-        agent.q_table[x,y,action] += 0.1 * (
-            reward + 0.9 * np.max(agent.q_table[nx,ny]) - agent.q_table[x,y,action]
-        )
+        while not done:
+            if random.uniform(0, 1) < epsilon:
+                action = random.randint(0, num_actions - 1)
+            else:
+                action = int(np.argmax(q_table[state]))
 
-        state = next_state
+            next_state, reward, done = env.step(action)
 
-# save
-with open("q_table.json", "w") as f:
-    json.dump(agent.q_table.tolist(), f)
+            q_table[state, action] = q_table[state, action] + alpha * (
+                reward + gamma * np.max(q_table[next_state]) - q_table[state, action]
+            )
+
+            state = next_state
+
+    return q_table

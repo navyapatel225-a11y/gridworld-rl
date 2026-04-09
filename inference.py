@@ -6,8 +6,7 @@ q_table = train_q_learning()
 env = GridEnv()
 
 def reset():
-    state = env.reset()
-    return {"state": int(state)}
+    return {"state": int(env.reset())}
 
 def step(action):
     state, reward, done = env.step(int(action))

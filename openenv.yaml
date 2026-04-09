@@ -8,18 +8,18 @@ tasks:
     max_steps: 10
     grader:
       type: llm
-      prompt_template: "Score from 0.0 to 1.0 based on reaching the goal."
+      prompt_template: "Score from 0.0 to 1.0 based on reaching goal."
 
   - id: task_medium
     difficulty: medium
     max_steps: 15
     grader:
       type: llm
-      prompt_template: "Score from 0.0 to 1.0 based on efficiency."
+      prompt_template: "Score based on efficiency."
 
   - id: task_hard
     difficulty: hard
     max_steps: 20
     grader:
       type: llm
-      prompt_template: "Score from 0.0 to 1.0 based on optimal path."
+      prompt_template: "Score based on optimal path."

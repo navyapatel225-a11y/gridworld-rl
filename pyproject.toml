@@ -1,6 +1,12 @@
 [project]
 name = "gridworld-rl"
 version = "0.1.0"
+dependencies = [
+    "numpy",
+    "fastapi",
+    "uvicorn",
+    "openenv-core>=0.2.0"
+]
 
 [project.scripts]
 openenv-server = "server.app:main"

@@ -1,10 +1,11 @@
 import sys
 import os
+
+# Fix import path
+sys.path.append("/app")
+
 from fastapi import FastAPI
 import uvicorn
-
-# Fix import path (VERY IMPORTANT)
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from inference import reset, step, act
 
@@ -26,6 +27,10 @@ def step_env(action: int):
 def act_env(state: int):
     return {"action": act(state)}
 
-# Keep server alive
-if __name__ == "__main__":
+# ✅ REQUIRED main()
+def main():
     uvicorn.run(app, host="0.0.0.0", port=7860)
+
+# ✅ REQUIRED entry trigger
+if __name__ == "__main__":
+    main()

@@ -5,9 +5,5 @@ WORKDIR /app
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install .
 
-ENV PYTHONPATH=/app
-ENV PYTHONUNBUFFERED=1
-
-CMD ["python", "server/app.py"]
+CMD ["openenv-server"]

@@ -6,4 +6,6 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD ["openenv-server"]
+ENV PYTHONPATH=/app
+
+CMD ["python", "server/app.py"]

@@ -6,7 +6,7 @@ COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 🔥 THIS LINE MAKES openenv-server WORK
+# 🔥 MOST IMPORTANT LINE
 RUN pip install .
 
 ENV PYTHONPATH=/app

@@ -2,29 +2,25 @@ import sys
 sys.path.append("/app")
 
 from fastapi import FastAPI
-from pydantic import BaseModel
 import uvicorn
+import threading
+
+from inference import run_episode
 
 app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"status": "ok"}
+    return {"status": "running"}
 
-class Dummy(BaseModel):
-    x: int = 0
+# 🔥 Run inference in background when server starts
+def start_inference():
+    run_episode()
 
-@app.post("/reset")
-def reset():
-    return {"state": 0}
-
-@app.post("/step")
-def step(d: Dummy):
-    return {"state": 1, "reward": 0.0, "done": False}
-
-@app.post("/act")
-def act(d: Dummy):
-    return {"action": 1}
+@app.on_event("startup")
+def startup_event():
+    thread = threading.Thread(target=start_inference)
+    thread.start()
 
 def main():
     uvicorn.run(app, host="0.0.0.0", port=7860)

@@ -13,15 +13,15 @@ app = FastAPI()
 def root():
     return {"status": "running"}
 
-# 🔥 Run inference in background when server starts
-def start_inference():
+def start():
     run_episode()
 
 @app.on_event("startup")
 def startup_event():
-    thread = threading.Thread(target=start_inference)
+    thread = threading.Thread(target=start)
     thread.start()
 
+# 🚨 REQUIRED
 def main():
     uvicorn.run(app, host="0.0.0.0", port=7860)
 

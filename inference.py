@@ -4,14 +4,15 @@ from openai import OpenAI
 from train import train_q_learning
 from env import GridEnv
 
+# 🚨 REQUIRED ENV VARIABLES
 API_BASE_URL = os.getenv("API_BASE_URL", "https://api.openai.com/v1")
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4.1-mini")
-HF_TOKEN = os.getenv("HF_TOKEN")
+API_KEY = os.getenv("HF_TOKEN")  # using HF_TOKEN as API key
 
-if HF_TOKEN is None:
-    raise ValueError("HF_TOKEN environment variable is required")
-
-client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
+client = OpenAI(
+    base_url=API_BASE_URL,
+    api_key=API_KEY
+)
 
 q_table = train_q_learning()
 env = GridEnv()
@@ -19,40 +20,28 @@ env = GridEnv()
 def run_episode(task="gridworld"):
     state = env.reset()
     done = False
-    step_count = 0
-    rewards = []
+    steps = 0
+    total_reward = 0.0
 
     print(f"[START] task={task} env=gridworld model={MODEL_NAME}", flush=True)
 
-    try:
-        while not done and step_count < 10:
-            action = int(np.argmax(q_table[state]))
-            next_state, reward, done = env.step(action)
+    while not done and steps < 10:
+        action = int(np.argmax(q_table[state]))
+        state, reward, done = env.step(action)
 
-            rewards.append(f"{reward:.2f}")
-            step_count += 1
+        total_reward += reward
+        steps += 1
 
-            print(
-                f"[STEP] step={step_count} action={action} reward={reward:.2f} done={str(done).lower()} error=null",
-                flush=True
-            )
-
-            state = next_state
-
-        success = str(done).lower()
-
-    except Exception as e:
-        success = "false"
         print(
-            f"[STEP] step={step_count} action=null reward=0.00 done=true error={str(e)}",
+            f"[STEP] step={steps} action={action} reward={reward:.2f} done={str(done).lower()} error=null",
             flush=True
         )
 
-    finally:
-        print(
-            f"[END] success={success} steps={step_count} rewards={','.join(rewards)}",
-            flush=True
-        )
+    score = total_reward
+
+    # 🚨 EMAIL REQUIRED FORMAT
+    print(f"[END] task={task} score={score:.2f} steps={steps}", flush=True)
+
 
 if __name__ == "__main__":
     run_episode()

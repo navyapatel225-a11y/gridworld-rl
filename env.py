@@ -9,11 +9,13 @@ class GridEnv:
 
     def step(self, action):
         if action == 1:
-            self.state = min(self.state + 1, self.goal)
+            self.state += 1
         else:
-            self.state = max(self.state - 1, 0)
+            self.state -= 1
 
-        reward = 1 if self.state == self.goal else 0
+        self.state = max(0, min(4, self.state))
+
+        reward = 1.0 if self.state == self.goal else 0.0
         done = self.state == self.goal
 
         return self.state, reward, done

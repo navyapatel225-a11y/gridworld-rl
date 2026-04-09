@@ -5,8 +5,6 @@ WORKDIR /app
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
-
-# 🔥 MOST IMPORTANT LINE
 RUN pip install .
 
 ENV PYTHONPATH=/app

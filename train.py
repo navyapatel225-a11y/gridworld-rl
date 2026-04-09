@@ -1,31 +1,28 @@
 import numpy as np
+from env import GridEnv
 
 def train_q_learning():
-    num_states = 5
-    num_actions = 2
+    env = GridEnv()
 
-    q_table = np.zeros((num_states, num_actions))
-
+    q_table = np.zeros((5, 2))
     alpha = 0.1
     gamma = 0.9
+    epsilon = 0.1
 
-    for _ in range(2000):
-        state = np.random.randint(0, num_states)
+    for _ in range(500):
+        state = env.reset()
         done = False
 
         while not done:
-            action = np.random.randint(0, num_actions)
-
-            if action == 1:
-                next_state = min(state + 1, num_states - 1)
+            if np.random.rand() < epsilon:
+                action = np.random.randint(2)
             else:
-                next_state = max(state - 1, 0)
+                action = np.argmax(q_table[state])
 
-            reward = 1 if next_state == num_states - 1 else 0
-            done = reward == 1
+            next_state, reward, done = env.step(action)
 
-            q_table[state][action] += alpha * (
-                reward + gamma * np.max(q_table[next_state]) - q_table[state][action]
+            q_table[state, action] += alpha * (
+                reward + gamma * np.max(q_table[next_state]) - q_table[state, action]
             )
 
             state = next_state

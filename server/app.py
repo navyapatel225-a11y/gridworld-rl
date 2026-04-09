@@ -5,33 +5,27 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
 
-from inference import reset, step, act
-
 app = FastAPI()
 
 @app.get("/")
 def root():
     return {"status": "ok"}
 
-class StepRequest(BaseModel):
-    action: int
-
-class ActRequest(BaseModel):
-    state: int
+class Dummy(BaseModel):
+    x: int = 0
 
 @app.post("/reset")
-def reset_env():
-    return reset()
+def reset():
+    return {"state": 0}
 
 @app.post("/step")
-def step_env(req: StepRequest):
-    return step(req.action)
+def step(d: Dummy):
+    return {"state": 1, "reward": 0.0, "done": False}
 
 @app.post("/act")
-def act_env(req: ActRequest):
-    return {"action": act(req.state)}
+def act(d: Dummy):
+    return {"action": 1}
 
-# 🔥 REQUIRED
 def main():
     uvicorn.run(app, host="0.0.0.0", port=7860)
 

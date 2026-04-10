@@ -1,8 +1,7 @@
 [project]
 name = "gridworld-rl"
 version = "0.1.0"
-description = "GridWorld RL environment for OpenEnv"
-readme = "README.md"
+description = "GridWorld RL environment"
 requires-python = ">=3.10"
 
 dependencies = [
@@ -12,13 +11,8 @@ dependencies = [
     "openenv-core>=0.2.0"
 ]
 
-# 🔥 ENTRY POINTS (IMPORTANT)
 [project.scripts]
 openenv-server = "server.app:main"
-
-# Optional but makes it more standard
-[tool.setuptools]
-packages = ["server"]
 
 [build-system]
 requires = ["setuptools", "wheel"]

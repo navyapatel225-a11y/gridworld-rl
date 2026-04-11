@@ -1,18 +1,21 @@
 from fastapi import FastAPI
+import uvicorn
 
 app = FastAPI()
 
-# Dummy state
 state_data = {"position": [0, 0]}
+
 
 @app.get("/")
 def root():
     return {"message": "GridWorld RL API running"}
 
+
 @app.post("/reset")
 def reset():
     state_data["position"] = [0, 0]
     return {"state": state_data}
+
 
 @app.post("/step")
 def step(action: str):
@@ -38,6 +41,17 @@ def step(action: str):
         "done": done
     }
 
+
 @app.get("/state")
 def state():
     return state_data
+
+
+# 🔥 THIS IS WHAT OPENENV NEEDS
+def main():
+    uvicorn.run("server.app:app", host="0.0.0.0", port=7860)
+
+
+# 🔥 THIS FIXES "not callable"
+if __name__ == "__main__":
+    main()

@@ -5,11 +5,13 @@ description = "GridWorld RL Environment"
 authors = [
     {name = "Navya Patel"}
 ]
+
 dependencies = [
     "fastapi",
     "uvicorn",
-    "pydantic"
+    "pydantic",
+    "openenv-core>=0.2.0"
 ]
 
 [project.scripts]
-server = "server.app:app"
+server = "server.app:main"

@@ -1,19 +1,15 @@
 [project]
 name = "gridworld-rl"
 version = "0.1.0"
-description = "GridWorld RL environment"
-requires-python = ">=3.10"
-
+description = "GridWorld RL Environment"
+authors = [
+    {name = "Navya Patel"}
+]
 dependencies = [
-    "numpy",
     "fastapi",
     "uvicorn",
-    "openenv-core>=0.2.0"
+    "pydantic"
 ]
 
 [project.scripts]
-openenv-server = "server.app:main"
-
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+server = "server.app:app"

@@ -1,47 +1,43 @@
-import sys
-import os
-sys.path.append("/app")
-
-from fastapi import FastAPI, Request
-import uvicorn
-
-from inference import reset, step, act
+from fastapi import FastAPI
 
 app = FastAPI()
 
-# ✅ health check
+# Dummy state
+state_data = {"position": [0, 0]}
+
 @app.get("/")
 def root():
-    return {"status": "ok"}
+    return {"message": "GridWorld RL API running"}
 
-# ✅ RESET
 @app.post("/reset")
-async def reset_env():
-    return reset()
+def reset():
+    state_data["position"] = [0, 0]
+    return {"state": state_data}
 
-# ✅ STEP (handles BOTH json + query)
 @app.post("/step")
-async def step_env(request: Request):
-    try:
-        data = await request.json()
-        action = data.get("action", 0)
-    except:
-        action = 0
-    return step(action)
+def step(action: str):
+    x, y = state_data["position"]
 
-# ✅ ACT (handles BOTH json + query)
-@app.post("/act")
-async def act_env(request: Request):
-    try:
-        data = await request.json()
-        state = data.get("state", 0)
-    except:
-        state = 0
-    return {"action": act(state)}
+    if action == "up":
+        y += 1
+    elif action == "down":
+        y -= 1
+    elif action == "left":
+        x -= 1
+    elif action == "right":
+        x += 1
 
-# REQUIRED
-def main():
-    uvicorn.run(app, host="0.0.0.0", port=7860)
+    state_data["position"] = [x, y]
 
-if __name__ == "__main__":
-    main()
+    reward = 1.0 if [x, y] == [2, 2] else 0.0
+    done = [x, y] == [2, 2]
+
+    return {
+        "state": state_data,
+        "reward": reward,
+        "done": done
+    }
+
+@app.get("/state")
+def state():
+    return state_data
